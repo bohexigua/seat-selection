@@ -3,9 +3,9 @@ let n = 7;			// n 列
 let map = [ 		// 电影院座位表
 [0, 0, 0, 0, 0, 0, 0], 
 [0, 1, 0, 0, 0, 0, 0],
-[0, 0, 1, 1, 0, 0, 0],
-[0, 0, 0, 1, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0]];
+[1, 1, 1, 1, 1, 1, 1],
+[1, 1, 1, 1, 1, 1, 1],
+[1, 1, 1, 1, 1, 1, 1]];
 
 /**
  @method getSeat
@@ -59,20 +59,25 @@ function getSeat(num) {
 	f = f1(1) * f2(1) + f1(2) * f2(2) + ... + f1(n) * f2(n)
 	选定一个最高的 f 作为返回值  
 	*/
-	let val = [];
+	let f1 = [];
+	let f2 = [];
+	for(let i = 0; i < m - 3; i++) {
+		f1.push(i + 1);
+	}
+	f1.push(m); f1.push(m - 1); f1.push(m - 2);
 	if(n & 1) {
 		for(let i = 0; i < Math.floor(n / 2); i++)
-			val.push(i + 1);
-		val.push(Math.ceil(n / 2));
+			f2.push(i + 1);
+		f2.push(Math.ceil(n / 2));
 		for(let i = Math.floor(n / 2); i > 0; i--)
-			val.push(i);
+			f2.push(i);
 	} else {
 		for(let i = 0; i < n / 2; i++)
-			val.push(i + 1);
-		val.push(n / 2);
-		val.push(n / 2);
+			f2.push(i + 1);
+		f2.push(n / 2);
+		f2.push(n / 2);
 		for(let i = n / 2; i > 0; i--)
-			val.push(i);
+			f2.push(i);
 	}
 	let max = {
 		m: -1,
@@ -86,11 +91,13 @@ function getSeat(num) {
 				let s = parseInt(empty[i][j].s);
 				let e = parseInt(empty[i][j].e);
 				if(e - s + 1 >= num) {
+					if(s == 0 && e == n - 1)
+						s = Math.ceil(n / 2) - Math.ceil(num / 2);
 					let sum = 0;
-					if(val[e] > val[s]) {
-						for(let k = 0; k < num; k++) sum += val[e - k] * (i + 1);
+					if(f2[e] > f2[s]) {
+						for(let k = 0; k < num; k++) sum += f2[e - k] * f1[i];
 					} else {
-						for(let k = 0; k < num; k++) sum += val[s + k] * (i + 1);
+						for(let k = 0; k < num; k++) sum += f2[s + k] * f1[i];
 					}
 					if(sum > max.val) {
 						max.m = i;
