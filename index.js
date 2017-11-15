@@ -4,7 +4,7 @@ let map = [ 		// 电影院座位表
 [0, 0, 0, 0, 0, 0, 0], 
 [0, 1, 0, 0, 0, 0, 0],
 [1, 1, 1, 1, 1, 1, 1],
-[1, 1, 1, 1, 1, 1, 1],
+[0, 0, 0, 0, 0, 0, 0],
 [1, 1, 1, 1, 1, 1, 1]];
 
 /**
@@ -18,7 +18,7 @@ function getSeat(num) {
 	/**
 	选座原则：前提当前 num 一定有解，是否有解可以提前判断并对按钮进行disabled操作
 	1.后三排为最佳观影位置
-	2.如整个座位表有已占位置，那么优先挨着已选座的位置选座
+	2.如某排座位表有已占位置，那么优先挨着已选座的位置选座
 	*/
 	let selected = [];
 	let empty = [];
@@ -39,7 +39,7 @@ function getSeat(num) {
 			}
 			if(j == map[i].length - 1 && s != -1)  {
 				if(typeof empty[i] === 'undefined') empty[i] = [];
-				empty[i].push({s: s, e: j});
+				if(s == 0 && !map[i][j] || s != 0) empty[i].push({s: s, e: j});
 			}
 		}
 	}
